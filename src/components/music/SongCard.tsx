@@ -56,3 +56,21 @@ export function ContinueCard({ tracks, index }: { tracks: Track[]; index: number
     </button>
   );
 }
+
+export function ArtistAvatar({ hue, name, followers, verified }: { hue: number; name: string; followers: string; verified?: boolean }) {
+  return (
+    <button className="group w-[140px] shrink-0 text-center">
+      <div className="relative mx-auto">
+        <div
+          className="mx-auto h-[124px] w-[124px] rounded-full"
+          style={{ background: `radial-gradient(circle at 30% 30%, oklch(0.7 0.24 ${hue}), oklch(0.35 0.2 ${(hue + 40) % 360}))` }}
+        />
+        {verified && (
+          <div className="absolute bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-aurora text-[10px] text-white glow-primary">✓</div>
+        )}
+      </div>
+      <div className="mt-3 line-clamp-1 text-sm font-semibold">{name}</div>
+      <div className="text-xs text-muted-foreground">{followers} followers</div>
+    </button>
+  );
+}
