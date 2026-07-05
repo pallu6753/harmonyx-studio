@@ -1,21 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/layout/AppShell";
 import { PlaylistCard } from "@/components/music/PlaylistCard";
 import { SongRow } from "@/components/music/SongRow";
-import { AI_PLAYLISTS, FEATURED_PLAYLISTS, TRENDING_SONGS } from "@/lib/mock-data";
-import { Grid3x3, List, Plus, Heart, Download, Clock } from "lucide-react";
-import { useState } from "react";
+import { AI_PLAYLISTS, FEATURED_PLAYLISTS } from "@/lib/mock-data";
+import { searchTracks } from "@/lib/music-api";
+import { usePlayer } from "@/lib/player-store";
+import { Grid3x3, Plus, Heart, Download, Clock } from "lucide-react";
+import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/library")({
   head: () => ({ meta: [{ title: "Your Library — HarmonyX AI" }] }),
   component: LibraryPage,
 });
 
-const TABS = ["Playlists", "Liked Songs", "Albums", "Artists", "Downloads", "History"];
+const TABS = ["Playlists", "Liked Songs", "Recently Played", "History"];
 
 function LibraryPage() {
   const [tab, setTab] = useState("Playlists");
   const all = [...AI_PLAYLISTS, ...FEATURED_PLAYLISTS];
+
+  const liked = usePlayer((s) => s.liked);
+  const popular = useQuery({
+    queryKey: ["tracks", "top hits"],
+    queryFn: () => searchTracks("top hits", 24),
+    staleTime: 5 * 60_000,
+  });
+
+  const likedTracks = useMemo(
+    () => (popular.data ?? []).filter((t) => liked[t.id]),
+    [popular.data, liked],
+  );
 
   return (
     <AppShell>
@@ -46,13 +61,12 @@ function LibraryPage() {
           ))}
         </div>
 
-        {/* Quick access */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
-            { label: "Liked Songs", count: "324 songs", icon: Heart, hue: 340 },
-            { label: "Downloaded", count: "48 songs", icon: Download, hue: 200 },
+            { label: "Liked Songs", count: `${likedTracks.length} songs`, icon: Heart, hue: 340 },
+            { label: "Downloaded", count: "0 songs", icon: Download, hue: 200 },
             { label: "Recently Played", count: "This week", icon: Clock, hue: 260 },
-            { label: "AI Creations", count: "12 tracks", icon: Plus, hue: 285 },
+            { label: "AI Creations", count: "0 tracks", icon: Plus, hue: 285 },
           ].map((q) => (
             <button key={q.label} className="glass group flex items-center gap-3 rounded-2xl p-3 pr-4 text-left transition hover:bg-white/10">
               <div
@@ -78,18 +92,26 @@ function LibraryPage() {
           </section>
         )}
 
-        {(tab === "Liked Songs" || tab === "History") && (
+        {tab === "Liked Songs" && (
           <section className="glass-strong rounded-2xl border border-white/10 p-4">
-            <div className="space-y-1">
-              {TRENDING_SONGS.map((s, i) => <SongRow key={s.id} song={s} index={i} />)}
-            </div>
+            {likedTracks.length ? (
+              <div className="space-y-1">
+                {likedTracks.map((_, i) => <SongRow key={likedTracks[i].id} tracks={likedTracks} index={i} />)}
+              </div>
+            ) : (
+              <div className="py-10 text-center text-sm text-muted-foreground">
+                Tap the heart on any song to save it here.
+              </div>
+            )}
           </section>
         )}
 
-        {(tab === "Albums" || tab === "Artists" || tab === "Downloads") && (
-          <div className="glass-strong flex min-h-[300px] items-center justify-center rounded-2xl border border-white/10 p-8 text-center text-sm text-muted-foreground">
-            {tab} view — connect your account to sync
-          </div>
+        {(tab === "Recently Played" || tab === "History") && popular.data && (
+          <section className="glass-strong rounded-2xl border border-white/10 p-4">
+            <div className="space-y-1">
+              {popular.data.slice(0, 10).map((_, i) => <SongRow key={popular.data![i].id} tracks={popular.data!} index={i} />)}
+            </div>
+          </section>
         )}
       </div>
     </AppShell>
