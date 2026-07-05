@@ -62,7 +62,7 @@ async function itunes(params: Record<string, string | number>) {
   const res = await fetch(`https://itunes.apple.com/search?${qs.toString()}`);
   if (!res.ok) throw new Error("Music API failed");
   const json = (await res.json()) as { results: ItunesResult[] };
-  return json.results.filter((r) => r.previewUrl && r.kind !== undefined && r.trackName).map(normalize);
+  return json.results.filter((r) => r.previewUrl && r.trackName).map(normalize);
 }
 
 export function searchTracks(query: string, limit = 24) {
