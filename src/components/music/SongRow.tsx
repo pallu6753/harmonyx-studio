@@ -6,7 +6,7 @@ export function SongRow({ tracks, index }: { tracks: Track[]; index: number }) {
   const song = tracks[index];
   const playQueue = usePlayer((s) => s.playQueue);
   const toggle = usePlayer((s) => s.toggle);
-  const liked = usePlayer((s) => s.liked[song.id]);
+  const liked = usePlayer((s) => s.likedIds.includes(song.id));
   const toggleLike = usePlayer((s) => s.toggleLike);
   const current = usePlayer((s) => s.queue[s.index]?.id);
   const playing = usePlayer((s) => s.playing);
