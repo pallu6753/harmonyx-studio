@@ -6,7 +6,7 @@ export function SongRow({ tracks, index }: { tracks: Track[]; index: number }) {
   const song = tracks[index];
   const playQueue = usePlayer((s) => s.playQueue);
   const toggle = usePlayer((s) => s.toggle);
-  const liked = usePlayer((s) => s.liked[song.id]);
+  const liked = usePlayer((s) => s.likedIds.includes(song.id));
   const toggleLike = usePlayer((s) => s.toggleLike);
   const current = usePlayer((s) => s.queue[s.index]?.id);
   const playing = usePlayer((s) => s.playing);
@@ -41,7 +41,7 @@ export function SongRow({ tracks, index }: { tracks: Track[]; index: number }) {
       <div className="hidden font-mono text-xs text-muted-foreground sm:block">{song.duration}</div>
       <div className="flex items-center justify-end gap-1">
         <button
-          onClick={() => toggleLike(song.id)}
+          onClick={() => toggleLike(song)}
           className={`hidden h-8 w-8 items-center justify-center rounded-full sm:flex ${liked ? "text-primary" : "text-muted-foreground opacity-0 group-hover:opacity-100"}`}
         >
           <Heart className={`h-4 w-4 ${liked ? "fill-primary" : ""}`} />
