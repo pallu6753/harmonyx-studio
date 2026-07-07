@@ -14,16 +14,248 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      liked_songs: {
+        Row: {
+          id: string
+          liked_at: string
+          track: Json
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          liked_at?: string
+          track: Json
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          liked_at?: string
+          track?: Json
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      playlist_items: {
+        Row: {
+          added_at: string
+          id: string
+          playlist_id: string
+          position: number
+          track: Json
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          id?: string
+          playlist_id: string
+          position?: number
+          track: Json
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          id?: string
+          playlist_id?: string
+          position?: number
+          track?: Json
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_items_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlists: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_pinned: boolean
+          is_public: boolean
+          name: string
+          sort_order: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_pinned?: boolean
+          is_public?: boolean
+          name: string
+          sort_order?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_pinned?: boolean
+          is_public?: boolean
+          name?: string
+          sort_order?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          preferences: Json
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          preferences?: Json
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          preferences?: Json
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      recently_played: {
+        Row: {
+          id: string
+          played_at: string
+          progress_seconds: number
+          track: Json
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          played_at?: string
+          progress_seconds?: number
+          track: Json
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          played_at?: string
+          progress_seconds?: number
+          track?: Json
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          crossfade_seconds: number
+          eq: Json
+          extras: Json
+          lyrics_language: string
+          notifications: Json
+          playback_rate: number
+          privacy: Json
+          theme: string
+          updated_at: string
+          user_id: string
+          volume: number
+        }
+        Insert: {
+          created_at?: string
+          crossfade_seconds?: number
+          eq?: Json
+          extras?: Json
+          lyrics_language?: string
+          notifications?: Json
+          playback_rate?: number
+          privacy?: Json
+          theme?: string
+          updated_at?: string
+          user_id: string
+          volume?: number
+        }
+        Update: {
+          created_at?: string
+          crossfade_seconds?: number
+          eq?: Json
+          extras?: Json
+          lyrics_language?: string
+          notifications?: Json
+          playback_rate?: number
+          privacy?: Json
+          theme?: string
+          updated_at?: string
+          user_id?: string
+          volume?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "guest" | "user" | "artist" | "creator" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +382,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["guest", "user", "artist", "creator", "admin"],
+    },
   },
 } as const

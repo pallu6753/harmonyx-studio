@@ -5,6 +5,7 @@ import {
 import type { ReactNode } from "react";
 import { Logo } from "../brand/Logo";
 import { MiniPlayer } from "./MiniPlayer";
+import { AccountMenu } from "../auth/AccountMenu";
 
 const NAV = [
   { to: "/", label: "Home", icon: Home },
@@ -77,11 +78,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             );
           })}
 
-          <div className="mt-auto">
+          <div className="mt-auto space-y-3">
+            <AccountMenu />
             <div className="glass rounded-2xl p-4">
               <div className="text-xs font-semibold text-aurora">Premium</div>
               <div className="mt-1 text-sm font-medium">Unlock AI Studio</div>
-              <div className="mt-0.5 text-xs text-muted-foreground">Demo mode active</div>
+              <div className="mt-0.5 text-xs text-muted-foreground">Cloud sync active</div>
               <button className="mt-3 w-full rounded-full bg-aurora py-2 text-xs font-semibold text-white glow-primary">
                 Explore Plans
               </button>
@@ -94,9 +96,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {/* Mobile header */}
           <header className="glass-strong sticky top-0 z-30 flex items-center justify-between border-b border-white/5 px-4 py-3 lg:hidden">
             <Link to="/"><Logo size={30} showText /></Link>
-            <Link to="/profile" className="glass flex h-9 w-9 items-center justify-center rounded-full">
-              <User className="h-4 w-4" />
-            </Link>
+            <AccountMenu compact />
           </header>
 
           <div className="flex-1 pb-40 lg:pb-28">{children}</div>
