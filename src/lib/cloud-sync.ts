@@ -25,13 +25,13 @@ async function pullFromCloud(userId: string) {
     supabase.from("recently_played").select("track, played_at").eq("user_id", userId).order("played_at", { ascending: false }).limit(40),
   ]);
 
-  const liked = (likedRes.data ?? []) as Array<{ track_id: string; track: Track }>;
+  const liked = (likedRes.data ?? []) as unknown as Array<{ track_id: string; track: Track }>;
   const cloudPlaylists = (playlistsRes.data ?? []) as Array<{
     id: string; name: string; description: string | null; cover_url: string | null;
     is_public: boolean; is_pinned: boolean; created_at: string; updated_at: string;
   }>;
-  const items = (itemsRes.data ?? []) as Array<{ playlist_id: string; track_id: string; track: Track; position: number }>;
-  const recent = (recentRes.data ?? []) as Array<{ track: Track }>;
+  const items = (itemsRes.data ?? []) as unknown as Array<{ playlist_id: string; track_id: string; track: Track; position: number }>;
+  const recent = (recentRes.data ?? []) as unknown as Array<{ track: Track }>;
 
   const playlists: Playlist[] = cloudPlaylists.map((p) => {
     const rows = items.filter((i) => i.playlist_id === p.id);
@@ -106,14 +106,14 @@ async function pushPlaylists(userId: string, playlists: Playlist[]) {
   }));
   await supabase.from("playlists").insert(rows);
 
-  const items: Array<Record<string, unknown>> = [];
+  const items: Array<{ playlist_id: string; user_id: string; track_id: string; track: Track; position: number }> = [];
   real.forEach((p) => {
     p.trackIds.forEach((tid, pos) => {
       const track = p.tracks[tid];
       if (track) items.push({ playlist_id: p.id, user_id: userId, track_id: tid, track, position: pos });
     });
   });
-  if (items.length) await supabase.from("playlist_items").insert(items);
+  if (items.length) await supabase.from("playlist_items").insert(items as never);
 }
 
 async function pushRecent(userId: string, recent: Track[]) {

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReelsRouteImport } from './routes/reels'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PlayerRouteImport } from './routes/player'
@@ -19,6 +20,7 @@ import { Route as LibraryRouteImport } from './routes/library'
 import { Route as GamesRouteImport } from './routes/games'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -35,6 +37,11 @@ const SearchRoute = SearchRouteImport.update({
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReelsRoute = ReelsRouteImport.update({
@@ -72,6 +79,11 @@ const CommunityRoute = CommunityRouteImport.update({
   path: '/community',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AcademyRoute = AcademyRouteImport.update({
   id: '/academy',
   path: '/academy',
@@ -86,6 +98,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/create': typeof CreateRoute
   '/games': typeof GamesRoute
@@ -93,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/player': typeof PlayerRoute
   '/profile': typeof ProfileRoute
   '/reels': typeof ReelsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -100,6 +114,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/create': typeof CreateRoute
   '/games': typeof GamesRoute
@@ -107,6 +122,7 @@ export interface FileRoutesByTo {
   '/player': typeof PlayerRoute
   '/profile': typeof ProfileRoute
   '/reels': typeof ReelsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -115,6 +131,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/create': typeof CreateRoute
   '/games': typeof GamesRoute
@@ -122,6 +139,7 @@ export interface FileRoutesById {
   '/player': typeof PlayerRoute
   '/profile': typeof ProfileRoute
   '/reels': typeof ReelsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -131,6 +149,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/academy'
+    | '/auth'
     | '/community'
     | '/create'
     | '/games'
@@ -138,6 +157,7 @@ export interface FileRouteTypes {
     | '/player'
     | '/profile'
     | '/reels'
+    | '/reset-password'
     | '/rewards'
     | '/search'
     | '/settings'
@@ -145,6 +165,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/academy'
+    | '/auth'
     | '/community'
     | '/create'
     | '/games'
@@ -152,6 +173,7 @@ export interface FileRouteTypes {
     | '/player'
     | '/profile'
     | '/reels'
+    | '/reset-password'
     | '/rewards'
     | '/search'
     | '/settings'
@@ -159,6 +181,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/academy'
+    | '/auth'
     | '/community'
     | '/create'
     | '/games'
@@ -166,6 +189,7 @@ export interface FileRouteTypes {
     | '/player'
     | '/profile'
     | '/reels'
+    | '/reset-password'
     | '/rewards'
     | '/search'
     | '/settings'
@@ -174,6 +198,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AcademyRoute: typeof AcademyRoute
+  AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
   CreateRoute: typeof CreateRoute
   GamesRoute: typeof GamesRoute
@@ -181,6 +206,7 @@ export interface RootRouteChildren {
   PlayerRoute: typeof PlayerRoute
   ProfileRoute: typeof ProfileRoute
   ReelsRoute: typeof ReelsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
@@ -207,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reels': {
@@ -258,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/academy': {
       id: '/academy'
       path: '/academy'
@@ -278,6 +318,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AcademyRoute: AcademyRoute,
+  AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
   CreateRoute: CreateRoute,
   GamesRoute: GamesRoute,
@@ -285,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlayerRoute: PlayerRoute,
   ProfileRoute: ProfileRoute,
   ReelsRoute: ReelsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,
