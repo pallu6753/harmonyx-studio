@@ -8,10 +8,13 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { PlayerEngine } from "../components/player/PlayerEngine";
+import { AuthProvider } from "../hooks/use-auth";
+import { CloudSyncBridge } from "../components/system/CloudSyncBridge";
 
 function NotFoundComponent() {
   return (
@@ -121,8 +124,12 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <PlayerEngine />
+      <AuthProvider>
+        <CloudSyncBridge />
+        <Outlet />
+        <PlayerEngine />
+        <Toaster position="top-right" theme="dark" richColors closeButton />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
